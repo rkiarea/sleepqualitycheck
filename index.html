@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sleep Quality Check — Poltekkes Tanjung Karang</title>
+  <style>
+    :root{
+      --night-purple: #1b1033;
+      --accent: #9d6ff3;
+      --white: #ffffff;
+      --card: #fdfcff;
+      --radius: 16px;
+    }
+    *{box-sizing:border-box;font-family:"Poppins",sans-serif;}
+    body{
+      margin:0;
+      background: radial-gradient(circle at 20% 20%, #2d1a4a, #12081d 80%);
+      color:var(--white);
+      overflow-x:hidden;
+      min-height:100vh;
+    }
+
+    /* Background stars (local) */
+    body::before{
+      content:"";
+      position:fixed;
+      top:0;left:0;width:100%;height:100%;
+      background:url('stars-bg.png');
+      background-size:cover;
+      background-position:center;
+      opacity:0.35;
+      z-index:-1;
+    }
+
+    .moon{
+      position:absolute;
+      top:40px;right:80px;
+      width:120px;height:120px;
+      background:radial-gradient(circle at 30% 30%,#fff9d9,#e0c36e 70%,transparent 100%);
+      border-radius:50%;
+      box-shadow:0 0 60px rgba(255,255,200,0.4);
+    }
+
+    header{text-align:center;padding:24px 16px 0;}
+    header img{width:200px;}
+    h1{margin:8px 0 4px;font-size:1.7em;font-weight:700;}
+    p.lead{margin:0;font-size:0.9em;color:#d8caef;}
+
+    .members{
+      display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px;
+    }
+    .member-card{
+      background:rgba(255,255,255,0.1);
+      padding:8px 14px;border-radius:20px;color:#fff;font-size:0.9em;
+      transition:all 0.3s ease;backdrop-filter:blur(5px);
+    }
+    .member-card:hover{background:rgba(157,111,243,0.3);transform:translateY(-3px);}
+
+    .container{
+      background:rgba(255,255,255,0.08);
+      border-radius:var(--radius);
+      backdrop-filter:blur(8px);
+      padding:20px;margin:24px auto;max-width:900px;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    form{
+      background:var(--card);
+      color:#2c1444;
+      border-radius:var(--radius);
+      padding:20px;margin-top:20px;
+    }
+
+    label{font-weight:600;display:block;margin-top:10px;}
+    input, select{
+      width:100%;padding:8px 10px;margin-top:5px;
+      border-radius:8px;border:1px solid #ddd;font-size:14px;
+    }
+    input:focus, select:focus{
+      border-color:var(--accent);
+      outline:none;box-shadow:0 0 8px rgba(157,111,243,0.4);
+    }
+
+    .btn{
+      background:var(--accent);color:var(--white);
+      border:none;border-radius:8px;padding:10px 18px;
+      margin-top:16px;cursor:pointer;font-weight:600;
+    }
+    .btn:hover{background:#b38aff;}
+
+    .results{
+      background:var(--card);color:#2c1444;
+      border-radius:var(--radius);padding:16px;margin-top:16px;
+    }
+
+    .footer{text-align:center;font-size:13px;color:#bfa8e7;margin:30px 0 10px;}
+
+    /* twinkling stars */
+    .star{position:fixed;background:white;border-radius:50%;opacity:0.8;animation:twinkle 2s infinite alternate;}
+    @keyframes twinkle{from{opacity:0.2;transform:scale(1);}to{opacity:0.9;transform:scale(1.3);} }
+
+    /* admin button */
+    #adminBtn{
+      position:fixed;bottom:10px;right:10px;
+      background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.3);
+      color:#fff;border-radius:50%;
+      width:40px;height:40px;font-size:20px;
+      cursor:pointer;
+    }
+    #adminPanel{
+      display:none;
+      position:fixed;
+      bottom:60px;right:10px;
+      background:rgba(0,0,0,0.85);
+      padding:16px;border-radius:12px;
+      max-height:60vh;overflow:auto;
+      width:300px;
+      color:#fff;font-size:0.9em;
+      backdrop-filter:blur(6px);
+    }
+    #adminPanel table{width:100%;border-collapse:collapse;}
+    #adminPanel th,#adminPanel td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.2);text-align:left;}
+  </style>
+</head>
+<body>
+  <div class="moon"></div>
+
+  <script>
+    // twinkling stars
+    for(let i=0;i<25;i++){
+      const s=document.createElement('div');
+      s.className='star';
+      s.style.width=s.style.height=Math.random()*3+1+'px';
+      s.style.top=Math.random()*100+'%';
+      s.style.left=Math.random()*100+'%';
+      s.style.animationDelay=Math.random()*3+'s';
+      document.body.appendChild(s);
+    }
+  </script>
+
+  <header>
+    <img src="logo poltekkes without shadow.png" alt="Logo Poltekkes Tanjung Karang">
+    <h1>Sleep Quality Check</h1>
+    <p class="lead">Website Pengukuran Kualitas Tidur (PSQI)<br>Dibuat oleh Mahasiswa Poltekkes Tanjung Karang</p>
+
+    <div class="members">
+      <div class="member-card">Alya Rahma Febriani</div>
+      <div class="member-card">Azyza</div>
+      <div class="member-card">Rahmania Nandhita Putri</div>
+      <div class="member-card">Syahrin Alfiansah</div>
+      <div class="member-card">Syifa Ayu Jaudiah</div>
+      <div class="member-card">Ser Roniya</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <form id="psqiForm" onsubmit="return false;">
+      <label>Nama Responden:</label>
+      <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+
+      <label>1. Kualitas tidur Anda secara keseluruhan?</label>
+      <select id="q1" required>
+        <option value="">-- Pilih --</option>
+        <option value="0">Sangat baik</option>
+        <option value="1">Cukup baik</option>
+        <option value="2">Buruk</option>
+        <option value="3">Sangat buruk</option>
+      </select>
+
+      <label>2. Berapa menit waktu yang dibutuhkan untuk tertidur?</label>
+      <input type="number" id="latency" placeholder="Menit" min="0" required>
+
+      <label>3. Berapa jam tidur Anda rata-rata?</label>
+      <input type="number" id="duration" placeholder="Jam" min="0" step="0.1" required>
+
+      <label>4. Berapa jam Anda di tempat tidur?</label>
+      <input type="number" id="inbed" placeholder="Jam" min="0" step="0.1" required>
+
+      <label>5. Seberapa sering Anda memakai obat tidur?</label>
+      <select id="med" required>
+        <option value="">-- Pilih --</option>
+        <option value="0">Tidak pernah</option>
+        <option value="1">Kadang</option>
+        <option value="2">Sering</option>
+        <option value="3">Hampir setiap malam</option>
+      </select>
+
+      <label>6. Seberapa sering Anda merasa kantuk di siang hari?</label>
+      <select id="day" required>
+        <option value="">-- Pilih --</option>
+        <option value="0">Tidak pernah</option>
+        <option value="1">1–2 kali/minggu</option>
+        <option value="2">3–4 kali/minggu</option>
+        <option value="3">Setiap hari</option>
+      </select>
+
+      <button class="btn" onclick="calculate()">Hitung & Simpan</button>
+    </form>
+
+    <div id="result" class="results" style="display:none;"></div>
+  </div>
+
+  <!-- Tombol admin rahasia -->
+  <button id="adminBtn" title="Admin View">⚙️</button>
+  <div id="adminPanel">
+    <h3>📋 Riwayat Responden</h3>
+    <table id="historyTable">
+      <thead><tr><th>Nama</th><th>Skor</th><th>Kualitas</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>Sleep Quality Check © 2025<br>
+    Poltekkes Kemenkes Tanjung Karang — KEP KI TK 2 Kelompok 6</p>
+  </div>
+
+  <script>
+    // Toggle panel admin
+    document.getElementById('adminBtn').onclick = ()=>{
+      const panel = document.getElementById('adminPanel');
+      panel.style.display = panel.style.display==='block'?'none':'block';
+      showHistory();
+    };
+
+    function calculate(){
+      const nama = document.getElementById('nama').value.trim();
+      if(!nama){ alert('Mohon isi nama responden!'); return; }
+
+      const q1v=parseInt(q1.value)||0;
+      const lat=parseFloat(latency.value)||0;
+      const dur=parseFloat(duration.value)||0;
+      const bed=parseFloat(inbed.value)||0;
+      const medv=parseInt(med.value)||0;
+      const dayv=parseInt(day.value)||0;
+
+      const latencyScore = lat<=15?0:lat<=30?1:lat<=60?2:3;
+      const durationScore = dur>=7?0:dur>=6?1:dur>=5?2:3;
+      const eff = (dur/bed)*100;
+      const effScore = eff>=85?0:eff>=75?1:eff>=65?2:3;
+
+      const total = q1v+latencyScore+durationScore+effScore+medv+dayv;
+      const status = total<=5? "Baik":"Buruk";
+
+      document.getElementById('result').style.display='block';
+      document.getElementById('result').innerHTML=
+        `<h3>Terima kasih, ${nama}</h3>
+         <p>Skor PSQI Anda: <b>${total}</b></p>
+         <p>Kualitas Tidur: <b>${status}</b></p>
+         <p>Data Anda tersimpan secara rahasia dan hanya pembuat web yang dapat mengakses hasil lengkap.</p>`;
+
+      // simpan ke localStorage
+      const records = JSON.parse(localStorage.getItem('sleepData')||'[]');
+      records.push({nama, skor:total, status});
+      localStorage.setItem('sleepData', JSON.stringify(records));
+    }
+
+    function showHistory(){
+      const tbody=document.querySelector('#historyTable tbody');
+      tbody.innerHTML='';
+      const records=JSON.parse(localStorage.getItem('sleepData')||'[]');
+      records.forEach(r=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.nama}</td><td>${r.skor}</td><td>${r.status}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
