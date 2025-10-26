@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta name="google-site-verification" content="wrPsXu8nSM7YKZry0MSa47-TCgKWDpXJcbPIsl3InKo" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sleep Quality Check — Poltekkes Tanjung Karang</title>
@@ -21,8 +20,6 @@
       overflow-x:hidden;
       min-height:100vh;
     }
-
-    /* Background stars (local) */
     body::before{
       content:"";
       position:fixed;
@@ -33,7 +30,6 @@
       opacity:0.35;
       z-index:-1;
     }
-
     .moon{
       position:absolute;
       top:40px;right:80px;
@@ -42,22 +38,17 @@
       border-radius:50%;
       box-shadow:0 0 60px rgba(255,255,200,0.4);
     }
-
     header{text-align:center;padding:24px 16px 0;}
     header img{width:200px;}
     h1{margin:8px 0 4px;font-size:1.7em;font-weight:700;}
     p.lead{margin:0;font-size:0.9em;color:#d8caef;}
-
-    .members{
-      display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px;
-    }
+    .members{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px;}
     .member-card{
       background:rgba(255,255,255,0.1);
       padding:8px 14px;border-radius:20px;color:#fff;font-size:0.9em;
       transition:all 0.3s ease;backdrop-filter:blur(5px);
     }
     .member-card:hover{background:rgba(157,111,243,0.3);transform:translateY(-3px);}
-
     .container{
       background:rgba(255,255,255,0.08);
       border-radius:var(--radius);
@@ -65,14 +56,12 @@
       padding:20px;margin:24px auto;max-width:900px;
       box-shadow:0 0 20px rgba(0,0,0,0.4);
     }
-
     form{
       background:var(--card);
       color:#2c1444;
       border-radius:var(--radius);
       padding:20px;margin-top:20px;
     }
-
     label{font-weight:600;display:block;margin-top:10px;}
     input, select{
       width:100%;padding:8px 10px;margin-top:5px;
@@ -82,26 +71,19 @@
       border-color:var(--accent);
       outline:none;box-shadow:0 0 8px rgba(157,111,243,0.4);
     }
-
     .btn{
       background:var(--accent);color:var(--white);
       border:none;border-radius:8px;padding:10px 18px;
       margin-top:16px;cursor:pointer;font-weight:600;
     }
     .btn:hover{background:#b38aff;}
-
     .results{
       background:var(--card);color:#2c1444;
       border-radius:var(--radius);padding:16px;margin-top:16px;
     }
-
     .footer{text-align:center;font-size:13px;color:#bfa8e7;margin:30px 0 10px;}
-
-    /* twinkling stars */
     .star{position:fixed;background:white;border-radius:50%;opacity:0.8;animation:twinkle 2s infinite alternate;}
     @keyframes twinkle{from{opacity:0.2;transform:scale(1);}to{opacity:0.9;transform:scale(1.3);} }
-
-    /* admin button */
     #adminBtn{
       position:fixed;bottom:10px;right:10px;
       background:rgba(255,255,255,0.15);
@@ -129,7 +111,6 @@
   <div class="moon"></div>
 
   <script>
-    // twinkling stars
     for(let i=0;i<25;i++){
       const s=document.createElement('div');
       s.className='star';
@@ -145,7 +126,6 @@
     <img src="logo poltekkes without shadow.png" alt="Logo Poltekkes Tanjung Karang">
     <h1>Sleep Quality Check</h1>
     <p class="lead">Website Pengukuran Kualitas Tidur (PSQI)<br>Dibuat oleh Mahasiswa Poltekkes Tanjung Karang</p>
-
     <div class="members">
       <div class="member-card">Alya Rahma Febriani</div>
       <div class="member-card">Azyza</div>
@@ -157,12 +137,12 @@
   </header>
 
   <div class="container">
-    <form id="psqiForm" onsubmit="return false;">
+    <form id="psqiForm" action="https://formspree.io/f/xovpvaer" method="POST" onsubmit="handleSubmit(event)">
       <label>Nama Responden:</label>
-      <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+      <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
 
       <label>1. Kualitas tidur Anda secara keseluruhan?</label>
-      <select id="q1" required>
+      <select id="q1" name="q1" required>
         <option value="">-- Pilih --</option>
         <option value="0">Sangat baik</option>
         <option value="1">Cukup baik</option>
@@ -171,16 +151,25 @@
       </select>
 
       <label>2. Berapa menit waktu yang dibutuhkan untuk tertidur?</label>
-      <input type="number" id="latency" placeholder="Menit" min="0" required>
+      <input type="number" id="latency" name="latency" placeholder="Menit" min="0" required>
 
       <label>3. Berapa jam tidur Anda rata-rata?</label>
-      <input type="number" id="duration" placeholder="Jam" min="0" step="0.1" required>
+      <input type="number" id="duration" name="duration" placeholder="Jam" min="0" step="0.1" required>
 
       <label>4. Berapa jam Anda di tempat tidur?</label>
-      <input type="number" id="inbed" placeholder="Jam" min="0" step="0.1" required>
+      <input type="number" id="inbed" name="inbed" placeholder="Jam" min="0" step="0.1" required>
 
-      <label>5. Seberapa sering Anda memakai obat tidur?</label>
-      <select id="med" required>
+      <label>5. Seberapa sering Anda mengalami gangguan tidur (misalnya terbangun di malam hari)?</label>
+      <select id="disturb" name="disturb" required>
+        <option value="">-- Pilih --</option>
+        <option value="0">Tidak pernah</option>
+        <option value="1">Kadang (1–2 kali/minggu)</option>
+        <option value="2">Sering (3–4 kali/minggu)</option>
+        <option value="3">Hampir setiap malam</option>
+      </select>
+
+      <label>6. Seberapa sering Anda memakai obat tidur?</label>
+      <select id="med" name="med" required>
         <option value="">-- Pilih --</option>
         <option value="0">Tidak pernah</option>
         <option value="1">Kadang</option>
@@ -188,8 +177,8 @@
         <option value="3">Hampir setiap malam</option>
       </select>
 
-      <label>6. Seberapa sering Anda merasa kantuk di siang hari?</label>
-      <select id="day" required>
+      <label>7. Seberapa sering Anda merasa kantuk di siang hari?</label>
+      <select id="day" name="day" required>
         <option value="">-- Pilih --</option>
         <option value="0">Tidak pernah</option>
         <option value="1">1–2 kali/minggu</option>
@@ -197,13 +186,12 @@
         <option value="3">Setiap hari</option>
       </select>
 
-      <button class="btn" onclick="calculate()">Hitung & Simpan</button>
+      <button class="btn" type="submit">Hitung & Kirim</button>
     </form>
 
     <div id="result" class="results" style="display:none;"></div>
   </div>
 
-  <!-- Tombol admin rahasia -->
   <button id="adminBtn" title="Admin View">⚙️</button>
   <div id="adminPanel">
     <h3>📋 Riwayat Responden</h3>
@@ -219,21 +207,22 @@
   </div>
 
   <script>
-    // Toggle panel admin
     document.getElementById('adminBtn').onclick = ()=>{
       const panel = document.getElementById('adminPanel');
       panel.style.display = panel.style.display==='block'?'none':'block';
       showHistory();
     };
 
-    function calculate(){
-      const nama = document.getElementById('nama').value.trim();
+    function handleSubmit(e){
+      e.preventDefault();
+      const nama = namaField.value.trim();
       if(!nama){ alert('Mohon isi nama responden!'); return; }
 
       const q1v=parseInt(q1.value)||0;
       const lat=parseFloat(latency.value)||0;
       const dur=parseFloat(duration.value)||0;
       const bed=parseFloat(inbed.value)||0;
+      const disturbv=parseInt(disturb.value)||0;
       const medv=parseInt(med.value)||0;
       const dayv=parseInt(day.value)||0;
 
@@ -242,20 +231,44 @@
       const eff = (dur/bed)*100;
       const effScore = eff>=85?0:eff>=75?1:eff>=65?2:3;
 
-      const total = q1v+latencyScore+durationScore+effScore+medv+dayv;
+      const total = q1v+latencyScore+durationScore+effScore+disturbv+medv+dayv;
       const status = total<=5? "Baik":"Buruk";
+
+      let tips = "";
+      if(total<=3){
+        tips=`<ul><li>Tidur Anda sangat baik — pertahankan rutinitas tidur yang konsisten.</li><li>Lanjutkan gaya hidup sehat dan olahraga ringan secara rutin.</li></ul>`;
+      } else if(total<=7){
+        tips=`<ul><li>Tidur Anda tergolong baik, tapi mulai perhatikan waktu tidur agar tetap konsisten.</li><li>Batasi penggunaan gawai 30 menit sebelum tidur.</li></ul>`;
+      } else if(total<=11){
+        tips=`<ul><li>Tidur Anda mulai terganggu. Ciptakan lingkungan tidur yang nyaman dan tenang.</li><li>Kurangi konsumsi kafein di sore hari.</li></ul>`;
+      } else if(total<=15){
+        tips=`<ul><li>Tidur Anda buruk. Hindari aktivitas berat menjelang tidur.</li><li>Coba teknik relaksasi seperti pernapasan dalam atau meditasi.</li></ul>`;
+      } else {
+        tips=`<ul><li>Kualitas tidur sangat buruk. Pertimbangkan konsultasi ke tenaga kesehatan.</li><li>Hindari kafein, atur waktu tidur tetap, dan jaga pola hidup sehat.</li></ul>`;
+      }
 
       document.getElementById('result').style.display='block';
       document.getElementById('result').innerHTML=
         `<h3>Terima kasih, ${nama}</h3>
          <p>Skor PSQI Anda: <b>${total}</b></p>
          <p>Kualitas Tidur: <b>${status}</b></p>
-         <p>Data Anda tersimpan secara rahasia dan hanya pembuat web yang dapat mengakses hasil lengkap.</p>`;
+         <p>Data Anda tersimpan secara rahasia dan juga dikirim ke sistem kami untuk analisis.</p>
+         <h4>💤 Tips Kesehatan Tidur untuk Anda:</h4>
+         ${tips}`;
 
-      // simpan ke localStorage
-      const records = JSON.parse(localStorage.getItem('sleepData')||'[]');
+      // simpan lokal
+      const records=JSON.parse(localStorage.getItem('sleepData')||'[]');
       records.push({nama, skor:total, status});
-      localStorage.setItem('sleepData', JSON.stringify(records));
+      localStorage.setItem('sleepData',JSON.stringify(records));
+
+      // kirim ke Formspree
+      fetch('https://formspree.io/f/xovpvaer',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({nama,skor:total,status})
+      })
+      .then(()=>console.log('Data terkirim ke Formspree'))
+      .catch(err=>console.error('Gagal kirim ke Formspree:',err));
     }
 
     function showHistory(){
@@ -268,7 +281,8 @@
         tbody.appendChild(tr);
       });
     }
+
+    const namaField=document.getElementById('nama');
   </script>
 </body>
 </html>
-
