@@ -38,6 +38,64 @@
       border-radius:50%;
       box-shadow:0 0 60px rgba(255,255,200,0.4);
     }
+
+    /* Responsif untuk posisi dan ukuran bulan di layar kecil */
+@media (max-width: 768px) {
+  .moon {
+    top: 10px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 480px) {
+  .moon {
+    top: 5px;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    opacity: 0.75;
+  }
+}
+    /* === Gambar Karikatur di Sisi Kanan === */
+    .karikatur-container {
+      position: fixed;
+      right: 30px;
+      bottom: 40px;
+      z-index: 50;
+      animation: floatUpDown 4s ease-in-out infinite;
+    }
+
+    .karikatur-img {
+      width: 230px;
+      height: auto;
+      opacity: 0.9;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(157, 111, 243, 0.4);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .karikatur-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px rgba(157, 111, 243, 0.7);
+    }
+
+    @keyframes floatUpDown {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .karikatur-container {
+        display: none;
+      }
+    }
     header{text-align:center;padding:24px 16px 0;}
     header img{width:200px;}
     h1{margin:8px 0 4px;font-size:1.7em;font-weight:700;}
@@ -63,13 +121,22 @@
       padding:20px;margin-top:20px;
     }
     label{font-weight:600;display:block;margin-top:10px;}
-    input, select{
+    input, select, textarea{
       width:100%;padding:8px 10px;margin-top:5px;
       border-radius:8px;border:1px solid #ddd;font-size:14px;
     }
-    input:focus, select:focus{
+    input:focus, select:focus, textarea:focus{
       border-color:var(--accent);
       outline:none;box-shadow:0 0 8px rgba(157,111,243,0.4);
+    }
+    textarea{resize:vertical;}
+    h2.section-title{
+      background:var(--accent);
+      color:white;
+      padding:10px 14px;
+      border-radius:8px;
+      margin-top:20px;
+      font-size:1.1em;
     }
     .btn{
       background:var(--accent);color:var(--white);
@@ -84,32 +151,13 @@
     .footer{text-align:center;font-size:13px;color:#bfa8e7;margin:30px 0 10px;}
     .star{position:fixed;background:white;border-radius:50%;opacity:0.8;animation:twinkle 2s infinite alternate;}
     @keyframes twinkle{from{opacity:0.2;transform:scale(1);}to{opacity:0.9;transform:scale(1.3);} }
-    #adminBtn{
-      position:fixed;bottom:10px;right:10px;
-      background:rgba(255,255,255,0.15);
-      border:1px solid rgba(255,255,255,0.3);
-      color:#fff;border-radius:50%;
-      width:40px;height:40px;font-size:20px;
-      cursor:pointer;
-    }
-    #adminPanel{
-      display:none;
-      position:fixed;
-      bottom:60px;right:10px;
-      background:rgba(0,0,0,0.85);
-      padding:16px;border-radius:12px;
-      max-height:60vh;overflow:auto;
-      width:300px;
-      color:#fff;font-size:0.9em;
-      backdrop-filter:blur(6px);
-    }
-    #adminPanel table{width:100%;border-collapse:collapse;}
-    #adminPanel th,#adminPanel td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.2);text-align:left;}
   </style>
 </head>
 <body>
   <div class="moon"></div>
-
+  <div class="karikatur-container">
+  <img src="karikatur-kelompok6.png" alt="Karikatur Kelompok 6" class="karikatur-img">
+</div>
   <script>
     for(let i=0;i<25;i++){
       const s=document.createElement('div');
@@ -138,11 +186,21 @@
 
   <div class="container">
     <form id="psqiForm" action="https://formspree.io/f/xovpvaer" method="POST" onsubmit="handleSubmit(event)">
-      <label>Nama Responden:</label>
-      <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+      <h2 class="section-title">Identitas Responden</h2>
+      <label>Nama Responden:</label><input type="text" id="nama" required>
+      <label>Usia:</label><input type="number" id="usia" required>
+      <label>Jenis Kelamin:</label>
+      <select id="gender" required><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select>
+      <label>Tempat Tinggal:</label><input type="text" id="tempat" required>
+      <label>Alamat:</label><textarea id="alamat" rows="2" required></textarea>
+      <label>Riwayat Penyakit:</label><textarea id="penyakit" rows="2" placeholder="Tuliskan jika ada (misal: hipertensi, diabetes, insomnia, dll)"></textarea>
+      <label for="photo">Unggah Foto Anda:</label>
+      <input type="file" id="photo" accept="image/*">
 
+
+      <h2 class="section-title">Indeks Kebiasaan Tidur</h2>
       <label>1. Kualitas tidur Anda secara keseluruhan?</label>
-      <select id="q1" name="q1" required>
+      <select id="q1" required>
         <option value="">-- Pilih --</option>
         <option value="0">Sangat baik</option>
         <option value="1">Cukup baik</option>
@@ -150,26 +208,27 @@
         <option value="3">Sangat buruk</option>
       </select>
 
-      <label>2. Berapa menit waktu yang dibutuhkan untuk tertidur?</label>
-      <input type="number" id="latency" name="latency" placeholder="Menit" min="0" required>
+      <label>2. Berapa menit waktu yang dibutuhkan sebelum tertidur?</label>
+      <input type="number" id="latency" min="0" placeholder="Menit" required>
 
-      <label>3. Berapa jam tidur Anda rata-rata?</label>
-      <input type="number" id="duration" name="duration" placeholder="Jam" min="0" step="0.1" required>
+      <label>3. Berapa jam tidur Anda rata-rata per malam?</label>
+      <input type="number" id="duration" min="0" step="0.1" required>
 
-      <label>4. Berapa jam Anda di tempat tidur?</label>
-      <input type="number" id="inbed" name="inbed" placeholder="Jam" min="0" step="0.1" required>
+      <label>4. Berapa jam Anda berada di tempat tidur?</label>
+      <input type="number" id="inbed" min="0" step="0.1" required>
 
       <label>5. Seberapa sering Anda mengalami gangguan tidur (misalnya terbangun di malam hari)?</label>
-      <select id="disturb" name="disturb" required>
+      <select id="disturb" required>
         <option value="">-- Pilih --</option>
         <option value="0">Tidak pernah</option>
         <option value="1">Kadang (1–2 kali/minggu)</option>
         <option value="2">Sering (3–4 kali/minggu)</option>
         <option value="3">Hampir setiap malam</option>
       </select>
+      <textarea id="disturbDesc" rows="2" placeholder="Deskripsikan gangguan tidur Anda (misal: nyeri, mimpi buruk, sering terbangun, dll)"></textarea>
 
       <label>6. Seberapa sering Anda memakai obat tidur?</label>
-      <select id="med" name="med" required>
+      <select id="med" required>
         <option value="">-- Pilih --</option>
         <option value="0">Tidak pernah</option>
         <option value="1">Kadang</option>
@@ -178,7 +237,7 @@
       </select>
 
       <label>7. Seberapa sering Anda merasa kantuk di siang hari?</label>
-      <select id="day" name="day" required>
+      <select id="day" required>
         <option value="">-- Pilih --</option>
         <option value="0">Tidak pernah</option>
         <option value="1">1–2 kali/minggu</option>
@@ -186,19 +245,10 @@
         <option value="3">Setiap hari</option>
       </select>
 
-      <button class="btn" type="submit">Hitung & Kirim</button>
+      <button class="btn" type="submit">Hitung & Lihat Hasil</button>
     </form>
 
     <div id="result" class="results" style="display:none;"></div>
-  </div>
-
-  <button id="adminBtn" title="Admin View">⚙️</button>
-  <div id="adminPanel">
-    <h3>📋 Riwayat Responden</h3>
-    <table id="historyTable">
-      <thead><tr><th>Nama</th><th>Skor</th><th>Kualitas</th></tr></thead>
-      <tbody></tbody>
-    </table>
   </div>
 
   <div class="footer">
@@ -207,82 +257,328 @@
   </div>
 
   <script>
-    document.getElementById('adminBtn').onclick = ()=>{
-      const panel = document.getElementById('adminPanel');
-      panel.style.display = panel.style.display==='block'?'none':'block';
-      showHistory();
-    };
-
     function handleSubmit(e){
       e.preventDefault();
-      const nama = namaField.value.trim();
-      if(!nama){ alert('Mohon isi nama responden!'); return; }
-
+      const nama=document.getElementById('nama').value;
       const q1v=parseInt(q1.value)||0;
       const lat=parseFloat(latency.value)||0;
       const dur=parseFloat(duration.value)||0;
       const bed=parseFloat(inbed.value)||0;
       const disturbv=parseInt(disturb.value)||0;
+      const disturbDesc=document.getElementById('disturbDesc').value.trim();
       const medv=parseInt(med.value)||0;
       const dayv=parseInt(day.value)||0;
+        // Ambil file foto (jika ada)
+  const photoFile = document.getElementById('photo').files[0];
+  let photoURL = "";
+  if (photoFile) {
+    photoURL = URL.createObjectURL(photoFile);
+  }
 
       const latencyScore = lat<=15?0:lat<=30?1:lat<=60?2:3;
       const durationScore = dur>=7?0:dur>=6?1:dur>=5?2:3;
       const eff = (dur/bed)*100;
       const effScore = eff>=85?0:eff>=75?1:eff>=65?2:3;
 
-      const total = q1v+latencyScore+durationScore+effScore+disturbv+medv+dayv;
-      const status = total<=5? "Baik":"Buruk";
+      const total = q1v + latencyScore + durationScore + effScore + disturbv + medv + dayv;
+      const status = total<=5? "Baik" : "Buruk";
 
-      let tips = "";
-      if(total<=3){
-        tips=`<ul><li>Tidur Anda sangat baik — pertahankan rutinitas tidur yang konsisten.</li><li>Lanjutkan gaya hidup sehat dan olahraga ringan secara rutin.</li></ul>`;
-      } else if(total<=7){
-        tips=`<ul><li>Tidur Anda tergolong baik, tapi mulai perhatikan waktu tidur agar tetap konsisten.</li><li>Batasi penggunaan gawai 30 menit sebelum tidur.</li></ul>`;
-      } else if(total<=11){
-        tips=`<ul><li>Tidur Anda mulai terganggu. Ciptakan lingkungan tidur yang nyaman dan tenang.</li><li>Kurangi konsumsi kafein di sore hari.</li></ul>`;
-      } else if(total<=15){
-        tips=`<ul><li>Tidur Anda buruk. Hindari aktivitas berat menjelang tidur.</li><li>Coba teknik relaksasi seperti pernapasan dalam atau meditasi.</li></ul>`;
-      } else {
-        tips=`<ul><li>Kualitas tidur sangat buruk. Pertimbangkan konsultasi ke tenaga kesehatan.</li><li>Hindari kafein, atur waktu tidur tetap, dan jaga pola hidup sehat.</li></ul>`;
-      }
+      const tips = getTips(total);
+      const cutoffInterpretasi = total <= 5 
+  ? "Berdasarkan standar PSQI (Pittsburgh Sleep Quality Index), skor ≤ 5 menunjukkan kualitas tidur yang baik."
+  : "Berdasarkan standar PSQI (Pittsburgh Sleep Quality Index), skor > 5 menunjukkan kualitas tidur yang buruk.";
 
-      document.getElementById('result').style.display='block';
-      document.getElementById('result').innerHTML=
-        `<h3>Terima kasih, ${nama}</h3>
-         <p>Skor PSQI Anda: <b>${total}</b></p>
-         <p>Kualitas Tidur: <b>${status}</b></p>
-         <p>Data Anda tersimpan secara rahasia dan juga dikirim ke sistem kami untuk analisis.</p>
-         <h4>💤 Tips Kesehatan Tidur untuk Anda:</h4>
-         ${tips}`;
 
-      // simpan lokal
-      const records=JSON.parse(localStorage.getItem('sleepData')||'[]');
-      records.push({nama, skor:total, status});
-      localStorage.setItem('sleepData',JSON.stringify(records));
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display='block';
+      resultDiv.innerHTML = `
+        <h3>Terima kasih, ${nama}</h3>
+        ${photoURL ? `<img src="${photoURL}" alt="Foto Responden" style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:3px solid #9d6ff3;margin-bottom:10px;">` : ""}
+        <p><strong>Skor PSQI Anda:</strong> ${total} / 21</p>
+        <p><strong>Kualitas Tidur:</strong> ${status}</p>
+        <p><strong>Interpretasi Standar PSQI:</strong> ${cutoffInterpretasi}</p>
+        <h4>💡 Rekomendasi untuk Anda:</h4>
+        <ul>${tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+      `;
 
-      // kirim ke Formspree
-      fetch('https://formspree.io/f/xovpvaer',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({nama,skor:total,status})
-      })
-      .then(()=>console.log('Data terkirim ke Formspree'))
-      .catch(err=>console.error('Gagal kirim ke Formspree:',err));
+        // Simpan hasil ke localStorage
+const records = JSON.parse(localStorage.getItem('sleepData') || '[]');
+records.push({ nama, skor: total, status });
+localStorage.setItem('sleepData', JSON.stringify(records));
+
+// Kirim data ke Formspree
+fetch('https://formspree.io/f/xovpvaer', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    nama: nama,
+    skor: total,
+    status: status,
+    interpretasi_standar: total <= 5 ? "Baik (≤5)" : "Buruk (>5)",
+  })
+})
+.then(() => console.log('✅ Data terkirim ke Formspree'))
+.catch(err => console.error('❌ Gagal kirim ke Formspree:', err));
     }
 
-    function showHistory(){
-      const tbody=document.querySelector('#historyTable tbody');
-      tbody.innerHTML='';
-      const records=JSON.parse(localStorage.getItem('sleepData')||'[]');
-      records.forEach(r=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML=`<td>${r.nama}</td><td>${r.skor}</td><td>${r.status}</td>`;
-        tbody.appendChild(tr);
-      });
+    function getTips(score){
+      const data = {
+        0: ["Tidur Anda sempurna, terus pertahankan pola hidup sehat."],
+        1: [
+          "Tidur Anda sangat baik, pertahankan rutinitas tidur.",
+          "Jaga pola makan dan hidrasi seimbang.",
+          "Hindari kafein menjelang tidur.",
+          "Pastikan suhu kamar nyaman.",
+          "Gunakan pencahayaan redup sebelum tidur.",
+          "Kurangi stres dengan meditasi ringan.",
+          "Tidur dan bangun di jam yang sama setiap hari.",
+          "Hindari tidur siang terlalu lama.",
+          "Batasi penggunaan gawai sebelum tidur.",
+          "Jaga lingkungan tidur tenang dan gelap."
+        ],
+            2: [
+      "Tidur Anda tergolong cukup baik, namun masih dapat ditingkatkan.",
+      "Coba kurangi paparan cahaya biru dari gawai 30 menit sebelum tidur.",
+      "Jangan membawa pekerjaan atau hal yang menegangkan ke tempat tidur.",
+      "Perhatikan ventilasi kamar agar sirkulasi udara tetap baik.",
+      "Konsumsi makanan bergizi seimbang yang membantu produksi hormon tidur.",
+      "Hindari alkohol dan minuman berkafein setelah sore hari.",
+      "Gunakan kasur yang bersih dan ganti sprei secara teratur.",
+      "Latih tubuh untuk tidur tanpa alarm sekali-sekali untuk mengetahui ritme alami Anda.",
+      "Jika terbangun di malam hari, hindari menatap layar ponsel.",
+      "Tidur adalah kebutuhan tubuh, bukan kemewahan, hargai waktu istirahat Anda."
+    ],
+    3: [
+      "Tidur Anda mulai menunjukkan tanda gangguan ringan.",
+      "Pastikan Anda memiliki rutinitas tidur dan bangun yang konsisten setiap hari.",
+      "Perhatikan kebiasaan sebelum tidur, seperti menonton atau makan larut malam.",
+      "Lakukan peregangan ringan sebelum tidur untuk meredakan ketegangan otot.",
+      "Hindari pikiran berat atau diskusi emosional menjelang tidur.",
+      "Gunakan pencahayaan hangat di kamar menjelang waktu tidur.",
+      "Luangkan waktu 15 menit untuk relaksasi seperti meditasi atau doa.",
+      "Jika sering terbangun, hindari melihat jam agar tidak menimbulkan stres.",
+      "Gunakan pakaian tidur yang longgar dan nyaman.",
+      "Ingat bahwa kualitas tidur lebih penting daripada kuantitas semata."
+    ],
+    4: [
+      "Kualitas tidur Anda tergolong cukup, namun perlu perbaikan ringan.",
+      "Mulai catat pola tidur harian Anda untuk mengenali penyebab gangguan kecil.",
+      "Pastikan Anda tidur di lingkungan yang bersih dan bebas gangguan suara.",
+      "Hindari mengonsumsi makanan pedas atau berlemak sebelum tidur.",
+      "Gunakan waktu satu jam sebelum tidur untuk menenangkan diri dari aktivitas harian.",
+      "Jika pikiran sulit tenang, tulis jurnal singkat agar tidak terbawa ke waktu tidur.",
+      "Perbanyak aktivitas di luar ruangan di siang hari untuk paparan sinar matahari alami.",
+      "Perhatikan durasi tidur, usahakan tetap 7–9 jam setiap malam.",
+      "Latih teknik mindfulness sederhana untuk menenangkan tubuh dan pikiran.",
+      "Jika kualitas tidur menurun selama beberapa minggu, segera lakukan evaluasi gaya hidup."
+    ],
+    5: [
+      "Mulai terlihat adanya gangguan kecil dalam pola tidur Anda.",
+      "Hindari penggunaan gawai setidaknya 1 jam sebelum tidur.",
+      "Jangan konsumsi kopi, teh, atau cokelat setelah sore hari.",
+      "Coba mandi air hangat sebelum tidur untuk membantu relaksasi otot.",
+      "Pastikan lingkungan tidur Anda benar-benar gelap, gunakan tirai tebal jika perlu.",
+      "Latih diri untuk tidak membawa ponsel ke tempat tidur.",
+      "Tidurlah hanya ketika benar-benar mengantuk, jangan memaksa tidur.",
+      "Kurangi waktu di tempat tidur selain untuk tidur dan aktivitas pribadi.",
+      "Jaga pola makan teratur agar metabolisme tidak mengganggu tidur.",
+      "Cobalah mendengarkan musik lembut atau suara alam untuk membantu tidur."
+    ],
+    6: [
+      "Kualitas tidur mulai terganggu secara ringan.",
+      "Cobalah evaluasi apakah stres menjadi faktor penyebab sulit tidur.",
+      "Luangkan waktu sore untuk olahraga ringan seperti jalan kaki.",
+      "Hindari minuman energi atau soda menjelang malam.",
+      "Buat jadwal tidur yang realistis dan dapat dipertahankan setiap hari.",
+      "Pastikan kamar tidur cukup sejuk (sekitar 24°C).",
+      "Gunakan aroma lembut seperti chamomile untuk membantu relaksasi.",
+      "Jika sulit tidur lebih dari 20 menit, bangun dan lakukan aktivitas tenang.",
+      "Perbanyak konsumsi air putih di siang hari agar tubuh tetap seimbang.",
+      "Jangan abaikan tanda kelelahan emosional yang bisa memengaruhi tidur."
+    ],
+    7: [
+      "Tidur Anda mulai menurun secara kualitas, perlu perhatian lebih.",
+      "Kurangi kebiasaan menonton atau bermain ponsel di tempat tidur.",
+      "Gunakan teknik relaksasi napas dalam selama 5 menit sebelum tidur.",
+      "Perhatikan postur tidur yang nyaman untuk menghindari nyeri tubuh.",
+      "Gunakan sprei dan selimut bersih dengan bahan lembut.",
+      "Jangan terlalu lama berbaring jika tidak bisa tidur, bangunlah dan tenangkan pikiran.",
+      "Kurangi beban pikiran dengan berbicara kepada orang yang dipercaya.",
+      "Cobalah tidur dengan posisi yang sama setiap malam agar tubuh beradaptasi.",
+      "Jangan konsumsi alkohol untuk mencoba tertidur lebih cepat.",
+      "Evaluasi waktu tidur Anda — apakah cukup 7–8 jam per malam."
+    ],
+    8: [
+      "Gangguan tidur semakin terasa, penting untuk mulai memperbaiki kebiasaan harian.",
+      "Kurangi paparan cahaya terang sebelum tidur.",
+      "Lakukan rutinitas menenangkan seperti membaca buku non-digital.",
+      "Hindari tidur siang lebih dari 30 menit.",
+      "Pastikan kasur tidak terlalu keras atau empuk.",
+      "Gunakan kipas atau suara putih (white noise) jika lingkungan bising.",
+      "Luangkan waktu di pagi hari untuk berjemur agar ritme biologis tubuh tetap seimbang.",
+      "Jangan memaksakan diri bekerja hingga larut malam.",
+      "Jika sering mimpi buruk, coba tulis perasaan sebelum tidur.",
+      "Tidur cukup akan meningkatkan daya tahan tubuh dan kesehatan mental."
+    ],
+    9: [
+      "Kualitas tidur cukup terganggu, perlu perhatian pada faktor stres dan gaya hidup.",
+      "Hindari makan berat atau pedas 2 jam sebelum tidur.",
+      "Ciptakan suasana kamar tidur yang tenang, rapi, dan sejuk.",
+      "Matikan lampu kamar sepenuhnya atau gunakan lampu tidur redup.",
+      "Jangan berbaring lama jika tidak mengantuk.",
+      "Biasakan bangun di jam yang sama setiap hari meskipun di akhir pekan.",
+      "Latihan peregangan lembut dapat membantu tubuh lebih siap tidur.",
+      "Pertimbangkan untuk menulis pikiran yang mengganggu agar pikiran lebih tenang.",
+      "Jika sering terbangun, hindari melihat jam.",
+      "Gunakan waktu istirahat untuk benar-benar menenangkan diri, bukan untuk berpikir berlebihan."
+    ],
+    10: [
+      "Tidur Anda mulai masuk kategori terganggu, perbaiki pola tidur secara konsisten.",
+      "Cobalah tidur di jam yang sama setiap malam, bahkan di akhir pekan.",
+      "Hindari aktivitas intens seperti olahraga berat mendekati waktu tidur.",
+      "Matikan semua perangkat elektronik minimal 60 menit sebelum tidur.",
+      "Ciptakan ritual relaksasi seperti minum teh herbal hangat atau meditasi ringan.",
+      "Perhatikan asupan cairan, jangan minum terlalu banyak sebelum tidur agar tidak sering buang air kecil.",
+      "Gunakan aroma menenangkan seperti lavender atau sandalwood di kamar.",
+      "Perhatikan kualitas udara — gunakan diffuser atau tanaman kecil di kamar tidur.",
+      "Batasi waktu tidur siang maksimal 20 menit.",
+      "Jangan menunda tidur, karena menunda waktu tidur dapat memperburuk insomnia ringan."
+    ],
+    11: [
+      "Gangguan tidur mulai nyata, tubuh bisa mulai terasa lelah di siang hari.",
+      "Coba buat jurnal tidur untuk mencatat jam tidur dan kualitasnya setiap hari.",
+      "Perhatikan tanda-tanda stres emosional yang mungkin memengaruhi pola tidur.",
+      "Latihan mindfulness atau meditasi dapat membantu menenangkan pikiran sebelum tidur.",
+      "Hindari membaca berita atau menonton hal yang menegangkan menjelang tidur.",
+      "Jika pikiran sibuk, tulis hal-hal yang harus dilakukan besok agar tidak mengganggu tidur malam.",
+      "Ciptakan rutinitas tidur yang tetap walau sedang sibuk.",
+      "Pertimbangkan untuk mendengarkan suara alam seperti hujan atau ombak.",
+      "Tidur dalam keadaan perut kenyang ringan bisa membantu lebih nyenyak.",
+      "Gunakan kasur hanya untuk tidur, bukan untuk bekerja atau makan."
+    ],
+    12: [
+      "Gangguan tidur Anda sedang, segera ambil langkah nyata memperbaiki kualitasnya.",
+      "Evaluasi stresor utama dalam hidup Anda dan cari cara menanganinya.",
+      "Hindari menatap layar ponsel saat terbangun di tengah malam.",
+      "Lakukan peregangan lembut untuk membantu tubuh rileks.",
+      "Atur pencahayaan kamar agar tidak terlalu terang, gunakan lampu temaram.",
+      "Pastikan bantal menopang kepala dan leher dengan baik.",
+      "Kurangi konsumsi gula dan makanan cepat saji yang memengaruhi kualitas tidur.",
+      "Lakukan relaksasi napas 4-7-8 setiap malam.",
+      "Beri jarak waktu minimal 2 jam antara makan malam dan tidur.",
+      "Jika sulit tidur, jangan memaksa. Bangun dan lakukan aktivitas ringan sampai mengantuk."
+    ],
+    13: [
+      "Tidur Anda tergolong buruk. Tubuh Anda mulai menunjukkan tanda kelelahan kronis.",
+      "Pastikan tidak mengonsumsi kafein setelah jam 14.00.",
+      "Lakukan ritual tidur yang sama setiap malam, seperti membaca atau minum teh hangat.",
+      "Kurangi beban mental dengan berbagi cerita kepada teman atau profesional.",
+      "Batasi waktu bekerja lembur agar ritme tubuh tetap seimbang.",
+      "Gunakan alarm lembut dengan suara alam agar tidak mengagetkan saat bangun.",
+      "Berolahragalah secara teratur, namun jangan terlalu dekat dengan jam tidur.",
+      "Gunakan tirai blackout untuk menghalangi cahaya luar.",
+      "Gunakan teknik grounding (merasakan napas, tubuh, dan detak jantung) untuk menenangkan pikiran.",
+      "Tidur cukup penting untuk kesehatan jantung dan sistem kekebalan tubuh."
+    ],
+    14: [
+      "Tidur Anda buruk dan bisa berdampak pada produktivitas serta suasana hati.",
+      "Perhatikan tanda-tanda gangguan tidur seperti mimpi buruk atau sering terbangun.",
+      "Hindari mengonsumsi alkohol sebagai cara untuk tertidur, karena menurunkan kualitas tidur.",
+      "Cobalah aromaterapi dan pencahayaan lembut untuk membantu menenangkan diri.",
+      "Berhenti menggunakan layar minimal 1 jam sebelum tidur.",
+      "Buat suasana kamar menjadi tempat paling nyaman di rumah Anda.",
+      "Jika stres tinggi, praktikkan meditasi terpandu atau doa sebelum tidur.",
+      "Batasi pikiran negatif — fokus pada rasa syukur sebelum tidur.",
+      "Gunakan selimut dengan berat sedang untuk memberi rasa aman dan nyaman.",
+      "Bicaralah dengan tenaga kesehatan jika gangguan berlangsung lebih dari sebulan."
+    ],
+    15: [
+      "Tidur Anda sangat terganggu. Kondisi ini memerlukan perhatian serius.",
+      "Buat jadwal tidur tetap dan patuhi dengan disiplin.",
+      "Kurangi penggunaan media sosial di malam hari.",
+      "Evaluasi kebiasaan makan dan minum malam hari, hindari makanan berat dan kafein.",
+      "Pertimbangkan untuk berkonsultasi dengan psikolog atau dokter tidur.",
+      "Lakukan aktivitas menenangkan seperti mandi air hangat atau membaca buku fisik.",
+      "Pastikan suhu kamar nyaman dan tidak terlalu lembap.",
+      "Kurangi cahaya biru dari layar dengan mode malam atau kacamata filter.",
+      "Gunakan aroma relaksasi seperti chamomile atau jasmine.",
+      "Mulailah tidur dengan pikiran positif, hindari beban emosional berlebihan."
+    ],
+    16: [
+      "Tidur Anda sangat buruk. Tubuh dan pikiran Anda mungkin kelelahan.",
+      "Coba ubah lingkungan tidur sepenuhnya, posisi tempat tidur, warna lampu, dan suhu ruangan.",
+      "Berhenti menunda tidur dengan alasan pekerjaan atau hiburan.",
+      "Jika sering terbangun malam hari, evaluasi kebiasaan minum menjelang tidur.",
+      "Gunakan jadwal relaksasi sebelum tidur minimal 30 menit.",
+      "Mulai rutinitas pagi dengan cahaya alami untuk mengatur ulang ritme sirkadian.",
+      "Pertimbangkan konseling atau terapi tidur jika masalah sudah lebih dari dua minggu.",
+      "Latih diri untuk menerima ketidaknyamanan tanpa panik agar tidur lebih alami.",
+      "Gunakan teknik relaksasi otot progresif sebelum tidur.",
+      "Tidur yang cukup akan memperbaiki konsentrasi dan suasana hati Anda."
+    ],
+    17: [
+      "Gangguan tidur Anda parah, dan tubuh bisa kehilangan kemampuan pemulihan optimal.",
+      "Hindari semua bentuk kafein, bahkan di pagi hari jika Anda sensitif.",
+      "Jangan gunakan ponsel, laptop, atau TV di tempat tidur sama sekali.",
+      "Pastikan kamar Anda tenang, gunakan earplug jika perlu.",
+      "Buat suasana tidur yang sama setiap malam untuk melatih otak mengenali waktu istirahat.",
+      "Gunakan latihan pernapasan lambat untuk menenangkan sistem saraf.",
+      "Jangan tidur siang terlalu lama, maksimal 20 menit.",
+      "Jika Anda merasa cemas saat tidur, fokus pada napas dan tubuh, bukan pikiran.",
+      "Minta dukungan dari keluarga agar membantu menciptakan lingkungan tidur sehat.",
+      "Pertimbangkan terapi kognitif untuk insomnia (CBT-I)."
+    ],
+    18: [
+      "Tidur Anda sangat terganggu, kemungkinan besar tubuh tidak sepenuhnya pulih setiap malam.",
+      "Cobalah mengatur ulang pola hidup: waktu makan, olahraga, dan waktu istirahat.",
+      "Kurangi beban pekerjaan malam hari secara bertahap.",
+      "Hindari konsumsi obat tidur tanpa rekomendasi profesional.",
+      "Gunakan teknik visualisasi positif sebelum tidur (membayangkan tempat damai).",
+      "Pertimbangkan konsultasi medis bila gangguan tidur disertai nyeri, mimpi buruk, atau kecemasan tinggi.",
+      "Pastikan tempat tidur hanya digunakan untuk tidur atau keintiman.",
+      "Tidur dalam keadaan tenang tanpa distraksi visual atau suara.",
+      "Jangan menekan perasaan, bicarakan beban pikiran Anda pada orang tepercaya.",
+      "Mulailah terapi relaksasi rutin, seperti yoga malam atau meditasi napas."
+    ],
+    19: [
+      "Gangguan tidur Anda berat. Tubuh dan emosi mungkin sudah kelelahan.",
+      "Prioritaskan tidur seperti Anda menjaga kesehatan fisik lainnya.",
+      "Lakukan detoks digital di malam hari: matikan semua perangkat sebelum jam 21.00.",
+      "Pastikan lingkungan kamar Anda terasa aman dan nyaman.",
+      "Kurangi konsumsi garam dan gula yang bisa memengaruhi keseimbangan tubuh.",
+      "Gunakan latihan relaksasi atau doa sebelum tidur.",
+      "Hindari pikiran bahwa Anda 'harus tidur'; itu hanya menambah kecemasan.",
+      "Fokus pada perasaan hangat dan nyaman di tubuh saat berbaring.",
+      "Pertimbangkan bimbingan profesional dari ahli tidur atau psikolog klinis.",
+      "Bangun dengan sinar matahari alami untuk membantu ritme sirkadian tubuh."
+    ],
+    20: [
+      "Tidur Anda sangat buruk — mungkin mengalami insomnia berat atau gangguan serius.",
+      "Segera konsultasikan dengan dokter atau ahli tidur untuk penanganan profesional.",
+      "Jaga kebersihan tidur (sleep hygiene) dengan disiplin setiap hari.",
+      "Kurangi stres dengan latihan mindfulness atau terapi bicara.",
+      "Gunakan tempat tidur hanya untuk tidur; hindari bekerja di sana.",
+      "Pastikan kamar sangat tenang dan gelap total.",
+      "Gunakan rutinitas tidur yang sama selama minimal 2 minggu tanpa perubahan.",
+      "Pertimbangkan terapi cahaya pagi hari (light therapy).",
+      "Jangan mengonsumsi alkohol sebagai cara menenangkan diri.",
+      "Catat semua kebiasaan tidur selama 7 hari untuk dibahas dengan profesional."
+    ],
+    21: [
+      "Kualitas tidur sangat buruk — kategori terparah. Kondisi ini perlu perhatian medis segera.",
+      "Gangguan tidur kronis bisa memicu gangguan kesehatan serius seperti tekanan darah tinggi dan depresi.",
+      "Segera lakukan pemeriksaan profesional untuk mengidentifikasi penyebab gangguan.",
+      "Jangan gunakan obat tidur tanpa resep dokter.",
+      "Ciptakan lingkungan tidur steril dari cahaya dan suara.",
+      "Libatkan keluarga untuk membantu menjaga rutinitas tidur yang sehat.",
+      "Lakukan terapi relaksasi harian seperti yoga, pernapasan dalam, atau meditasi sebelum tidur.",
+      "Kurangi stres dengan aktivitas menenangkan di siang hari.",
+      "Jangan menunda perawatan profesional jika kualitas tidur tidak membaik.",
+      "Ingat: tidur bukan sekadar istirahat, tetapi kebutuhan vital untuk kelangsungan hidup."
+    ]
+      };
+      return data[score] || ["Perhatikan kualitas tidur Anda dan konsultasikan jika gangguan berlanjut."];
     }
-
-    const namaField=document.getElementById('nama');
   </script>
 </body>
 </html>
